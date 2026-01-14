@@ -12,7 +12,7 @@ const facilities = [
   { title: "PLACEMENT GUIDELINES", desc: "Unique at-sea placement program where cadets train on various ship types across different marine sectors.", image: "/maritime-cadets-in-white-uniform-training.jpg" },
   { title: "ACCREDITATIONS / APPROVALS", desc: "Courses approved by STCW Council with guidance from an advisory board of industry experts and academic leaders.", image: "/person-signing-maritime-certification-documents.jpg" },
   { title: "PARTNERS & SUPPORTING ORGANISATIONS", desc: "Extended knowledge, expertise, and network from supporting partners keep our standards relevant.", image: "/maritime-professionals-discussing-partnership.jpg" },
-  { title: "LABORATORY FACILITY FOR HANDS-ON TRAINING", desc: "First-hand experience with course concepts; opportunity to explore practical methods used by industry specialists.", image: "/lab-hands-on-training.jpg" },
+  { title: "LABORATORY FACILITY FOR HANDS-ON TRAINING", desc: "First-hand experience with course concepts; opportunity to explore practical methods used by industry specialists.", image: "/advanced-computer-lab-with-maritime-simulation.jpg" },
 ]
 
 export default function FacilitiesPage() {
@@ -39,7 +39,7 @@ export default function FacilitiesPage() {
       <section className="mx-auto max-w-7xl px-4 py-12 md:py-16 bg-page-white">
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <h2 className="text-3xl font-black md:text-4xl mb-4 leading-tight heading-premium text-primary-cyan">
-            Cochin Maritime Academy Facilities
+            SNEF India Facilities
           </h2>
           <p className="text-base leading-relaxed md:text-lg body-premium">
             We are enriched with an outstanding faculty team, comprising of high profile and experienced Captains and Chief-Officers who are capable of providing excellent academic training in all our courses.
@@ -52,22 +52,24 @@ export default function FacilitiesPage() {
               <div className="h-48 w-full overflow-hidden">
                 <ParallaxImage src={f.image} alt={f.title} className="h-full w-full" intensity={0.12} zoom={0.06} />
               </div>
-              <CardContent className="p-6">
-                <h3 className="mb-2 text-lg font-bold uppercase heading-premium text-primary-cyan">
+              <CardContent className="p-6 flex flex-col flex-grow min-h-[160px]">
+                <h3 className="mb-2 text-lg font-bold uppercase heading-premium text-primary-cyan break-words">
                   {f.title}
                 </h3>
-                <p className="mb-4 text-sm leading-relaxed text-dark-secondary">
+                <p className="mb-4 text-sm leading-relaxed text-dark-secondary flex-grow overflow-hidden">
                   {f.desc}
                 </p>
-                <button className="w-full font-semibold py-2 rounded transition-all uppercase btn-primary" onClick={() => openDetails(f)}>
-                  View Detail
-                </button>
+                <div className="mt-2">
+                  <button className="w-full font-semibold py-2 rounded transition-all uppercase btn-primary" onClick={() => openDetails(f)}>
+                    View Detail
+                  </button>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
       </section>
-      {/* Dialog handled elsewhere */}
+      <DetailDialog open={dialogOpen} onOpenChange={setDialogOpen} data={dialogData} />
     </div>
   )
 }

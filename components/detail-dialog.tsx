@@ -37,7 +37,7 @@ export default function DetailDialog({
               {data.image ? (
                 <div className="mt-4 overflow-hidden rounded-lg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={data.image} alt={data.title} className="h-48 w-full object-cover" loading="lazy" decoding="async" />
+                  <img src={data.image} alt={data.title} className="w-full h-auto max-h-[50vh] object-contain" loading="lazy" decoding="async" />
                 </div>
               ) : null}
               <div className="mt-4 text-sm leading-relaxed text-neutral-700">
@@ -47,8 +47,8 @@ export default function DetailDialog({
                 <Dialog.Close asChild>
                   <Button variant="outline" className="border-[#0B2A4A] text-[#0B2A4A]">Close</Button>
                 </Dialog.Close>
-                <Link href={`/contact?message=${encodeURIComponent(`Hey, I would like to know more about ${data.title}. ${data.contactMessage}`)}`} className="inline-block">
-                  <Button className="bg-[#0B2A4A] text-white hover:bg-[#081E35]">Get to know more</Button>
+                <Link href={`/contact?message=${encodeURIComponent(`Hello, I would like to know more about ${data.title}. ${data.contactMessage}`)}`} className="inline-block">
+                  <Button className="bg-[#0B2A4A] text-white hover:bg-[#081E35]">Know more</Button>
                 </Link>
               </div>
             </div>

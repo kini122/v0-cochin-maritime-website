@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const nav = [
   { href: "/", label: "HOME" },
@@ -17,13 +17,18 @@ const nav = [
 export default function SiteHeader() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [isHome, setIsHome] = useState(false)
+
+  useEffect(() => {
+    setIsHome(pathname === "/")
+  }, [pathname])
 
   const leftNav = nav.slice(0, 3)
   const rightNav = nav.slice(3)
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full border-b bg-white text-gray-800 transition-all duration-300 ease-in-out border-light-color">
-      <div className="relative flex items-center justify-between" style={{ height: "134px", maxWidth: "1652px", width: "100%", margin: "0 auto", padding: "0 29px 0 80px" }}>
+      <div className="relative flex items-center justify-between site-header-container">
         {/* Left navigation (desktop) */}
         <nav className="hidden lg:flex items-center gap-10">
           {leftNav.map((item) => (
@@ -47,14 +52,29 @@ export default function SiteHeader() {
         {/* Centered Logo */}
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
           <Link href="/" className="group relative flex flex-col items-center">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F84749e18bca64bd7a57af62d04439b13%2Fa867cc2fa9c64655859d3f65ac1500c0"
-              alt="Cochin Maritime Academy"
-              className="h-24 w-24 transition-all duration-300"
-            />
-            <span className="block text-sm font-semibold tracking-widest uppercase font-display text-primary-cyan" style={{ fontWeight: "600" }}>
-              <span style={{ color: "rgb(157, 57, 57)" }}>SNEFF INDIA</span>
-            </span>
+            {isHome ? (
+              <>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F9aed9e355eef433f905fdc33685caf52%2Fae5c232152c6458babbf35a1bc3edf11?format=webp&width=800"
+                  alt="Captains Bridge"
+                  className="h-24 w-24 transition-all duration-300"
+                />
+                <span className="block text-sm font-semibold tracking-widest uppercase font-display site-header-title mt-1">
+                  <span className="site-header-brand-color" style={{ color: 'rgb(0, 152, 183)' }}>Captains Bridge</span>
+                </span>
+              </>
+            ) : (
+              <>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F84749e18bca64bd7a57af62d04439b13%2Fa867cc2fa9c64655859d3f65ac1500c0"
+                  alt="SNEF India"
+                  className="h-24 w-24 transition-all duration-300"
+                />
+                <span className="block text-sm font-semibold tracking-widest uppercase font-display text-primary-cyan site-header-title">
+                  <span className="site-header-brand-color">SNEF INDIA</span>
+                </span>
+              </>
+            )}
           </Link>
         </div>
 
@@ -88,7 +108,7 @@ export default function SiteHeader() {
 
         {/* Mobile Menu Button */}
         <button
-          className="rounded-md p-2 transition-colors duration-200 lg:hidden hover:bg-gray-100 text-dark"
+          className="ml-auto mobile-menu-toggle rounded-md p-2 transition-colors duration-200 lg:hidden hover:bg-gray-100 text-dark"
           aria-label="Toggle Menu"
           onClick={() => setOpen((s) => !s)}
         >

@@ -34,6 +34,7 @@ import YouTubeHeroBackground from "@/components/youtube-hero-background"
 import ParallaxImage from "@/components/parallax-image"
 import ParallaxFixedSection from "@/components/parallax-fixed-section"
 import { RevealImageList } from "@/components/ui/reveal-images"
+import TypingHeroTitle from "@/components/typing-hero-title"
 
 // Animation hook for scroll-triggered animations
 function useIntersectionObserver(options = {}) {
@@ -81,12 +82,118 @@ function AnimatedSection({
   )
 }
 
-export default function CochinMaritimeAcademy() {
+function HomeContactForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    course: '',
+    message: ''
+  })
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!formData.name || !formData.email || !formData.phone) {
+      alert('Please fill in all required fields')
+      return
+    }
+
+    setIsLoading(true)
+
+    const whatsappNumber = '919495145500'
+    const message = `Hello, I am interested in your courses.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCourse: ${formData.course || 'Not specified'}\n\nMessage: ${formData.message || 'No additional message'}`
+
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+
+    window.open(whatsappLink, '_blank')
+
+    setFormData({ name: '', email: '', phone: '', course: '', message: '' })
+    setIsLoading(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <Input
+          name="name"
+          placeholder="Your Name *"
+          className="border border-light-color rounded-md bg-white text-gray-800 text-sm"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <Input
+          name="email"
+          type="email"
+          placeholder="Your Email *"
+          className="border border-light-color rounded-md bg-white text-gray-800 text-sm"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <Input
+          name="phone"
+          type="tel"
+          placeholder="Your Phone *"
+          className="border border-light-color rounded-md bg-white text-gray-800 text-sm"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <Select
+          name="course"
+          value={formData.course}
+          onChange={handleChange}
+          defaultValue=""
+          className="border border-light-color rounded-md bg-white text-gray-800 text-sm"
+        >
+          <option value="">Select a course</option>
+          {courseTitles.map((title) => (
+            <option key={title} value={title}>{title}</option>
+          ))}
+        </Select>
+      </div>
+      <div>
+        <Textarea
+          name="message"
+          rows={4}
+          placeholder="Your Message"
+          className="border border-light-color rounded-md bg-white text-gray-800 text-sm"
+          value={formData.message}
+          onChange={handleChange}
+        />
+      </div>
+      <button
+        type="submit"
+        className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={isLoading}
+      >
+        {isLoading ? 'Sending...' : 'Send Message'}
+      </button>
+    </form>
+  )
+}
+
+export default function CaptainsBridge() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogData, setDialogData] = useState<DetailDialogData | null>(null)
   const [courseModalOpen, setCourseModalOpen] = useState(false)
-  const [selectedCourse, setSelectedCourse] = useState<{ title: string; description: string } | null>(null)
+  const [selectedCourse, setSelectedCourse] = useState<{ title: string; description: string; image?: string | null } | null>(null)
 
   const courseDescriptions = {
     "Hydrogen Sulphide Awareness (H2S)": "Hydrogen Sulphide (H2S) is a highly toxic and flammable gas. Each year in Canada, workers are injured and killed by exposure to H2S. H2S Awareness explains the properties of H2S, identifies control measures and provides a practical description of what to do in the event of exposure. The risk of H2S exposure exists in many industries, including, but not limited to oil and gas, pulp and paper, construction, and mining. In workplaces where the possibility of H2S exposure exists, ALL workers should have H2S Awareness training. Workers who are at risk of exposure to H2S and/or workers with rescue responsibilities also require H2S Alive and workplace-specific training.",
@@ -97,6 +204,13 @@ export default function CochinMaritimeAcademy() {
     "Crane Operators Theory (On Demand Practical)": "Our Crane Operator Training Program will train your operators on the safe use and operation of Electric Overhead Traveling Bridge Cranes (EOT). Operator responsibilities and requirements, applicable legislation and compliance requirements and how they apply to your company. Our training programs are designed to your specific requirements, fully develop your employ ability skills to maximize performance and certify your operators according to all legislative requirements.",
     "Cookery Course With HACCP": "On completion of this food safety training course, participants will be able to understand their requirements under food safety legislation as well as following best work practices. So you can follow all with the utmost care and professionalism, ensuring a very high quality of preparation. Fully Practical Course by the participants who will be protagonists in the preparations that will be done within our professional lab.",
     "Basic Cooking Course Certification": "Get info about online programs in cooking. Read about program requirements, course topics, and degree levels, and check out career and continuing education options. Online diploma programs in cooking don't exist, but there are fully online programs that award certificates in various types of culinary studies. Online cooking certificate programs emphasize the fundamentals of cuisine and practical cooking skills, combining textbooks, online study materials, training DVDs and cooking exercises to be done in students' kitchens. Therefore, online students must have a well-stocked, well-equipped kitchen.",
+  }
+
+  const openHomeDetail = (course: { title: string; description?: string; image?: string }) => {
+    const description = `${course.title} — ${course.description || 'Overview: Hands-on modules, safety standards, and practical drills. Includes competency assessment and course completion guidance. For schedule, fees, and enrollment assistance, contact our team.'}`
+    const contactMessage = `Inquiry about ${course.title}: Please share syllabus, next batch dates, fees, and prerequisites.`
+    setDialogData({ title: course.title, description, image: course.image || null, contactMessage })
+    setDialogOpen(true)
   }
 
   useEffect(() => {
@@ -138,13 +252,19 @@ export default function CochinMaritimeAcademy() {
     <div className="min-h-screen bg-page-white">
       {/* Hero Section */}
       <section id="home" className="relative min-h-[90vh] flex items-center bg-page-white">
-        <YouTubeHeroBackground videoId="UG4wQMfSp6g" overlayOpacity={0.2} heightClass="min-h-[90vh]">
-          <div className="mx-auto max-w-[1320px] px-20 pt-20 pb-[21px] flex flex-col items-start justify-center relative min-h-[90vh]" style={{ paddingLeft: '80px', paddingRight: '80px' }}>
+        <YouTubeHeroBackground videoSrc="https://cdn.builder.io/o/assets%2F9aed9e355eef433f905fdc33685caf52%2Fbf936fb889cb44438b1217b5daa6a76d?alt=media&token=d97ab75b-fbac-4318-ba19-2275c16c1484&apiKey=9aed9e355eef433f905fdc33685caf52" overlayOpacity={0.2} heightClass="min-h-[90vh]">
+          <div className="hero-inner mx-auto max-w-[1320px] px-20 pt-20 pb-[21px] flex flex-col items-center lg:items-start justify-center relative min-h-[90vh]">
             <div className="max-w-3xl">
-              <h1 className="text-6xl md:text-7xl font-black mb-12 animate-in fade-in slide-in-from-bottom duration-1000 text-balance leading-tight" style={{ color: 'rgba(255, 255, 255, 1)', letterSpacing: '3.6px', textTransform: 'uppercase', font: '900 99px/90px "Bebas Neue", sans-serif' }}>
-                Welcome to SNEFF INDIA
-              </h1>
-              <div className="flex flex-col sm:flex-row gap-8 animate-in slide-in-from-bottom duration-800 delay-300">
+              <TypingHeroTitle
+                texts={[
+                  "Welcome to CAPTAINS BRIDGE",
+                  "Top rated maritime training center",
+                  "we train future marine engineers",
+                ]}
+                displayDuration={3000}
+                typingSpeed={50}
+              />
+              <div className="hero-cta mt-6 flex flex-col sm:flex-row gap-8 animate-in slide-in-from-bottom duration-800 delay-300">
                 <button
                   className="px-10 py-4 text-lg font-bold uppercase transition-all duration-300 rounded btn-primary"
                   onClick={() => scrollToSection("courses")}
@@ -152,7 +272,7 @@ export default function CochinMaritimeAcademy() {
                   Explore Courses
                 </button>
                 <button
-                  className="px-10 py-4 text-lg font-bold uppercase transition-all duration-300 rounded btn-outline-cyan"
+                  className="px-10 py-4 text-lg font-bold uppercase transition-all duration-300 rounded btn-primary"
                   onClick={() => scrollToSection("contact")}
                 >
                   Contact Us
@@ -178,20 +298,20 @@ export default function CochinMaritimeAcademy() {
         imageUrl="https://images.pexels.com/photos/34664187/pexels-photo-34664187.jpeg"
         className="py-16"
       >
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <div className="text-center">
-            <h3 className="text-3xl md:text-4xl font-black heading-premium text-primary-cyan">Explore Our Maritime World</h3>
+            <h3 className="text-3xl md:text-4xl font-black heading-premium text-white">Explore Our Maritime World</h3>
           </div>
         </div>
       </ParallaxFixedSection>
 
       {/* About Section */}
       <section id="about" className="py-32 bg-page-white">
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight heading-premium text-primary-cyan">
-                Welcome to Cochin Maritime Academy
+                Welcome to CAPTAINS BRIDGE
               </h2>
               <div className="w-16 h-px mx-auto divider-gold" />
             </div>
@@ -200,25 +320,46 @@ export default function CochinMaritimeAcademy() {
           <div className="grid md:grid-cols-3 gap-10 mt-20">
             {[
               {
-                icon: Ship,
-                title: "Marine Institute",
+                icon: Award,
+                title: "MARINE VALUE-ADDED SAFETY COURSES",
                 description:
-                  "We undertake, coordinate, promote and assist in marine research and development. We also provide specialized manpower and...",
-                image: "/maritime-training-classroom-with-students.jpg",
+                  "We provide the best Value added courses in maritime with latest research and technique.",
+                image: "https://images.pexels.com/photos/28282297/pexels-photo-28282297.jpeg",
+              },
+              {
+                icon: Users,
+                title: "MARINE CREW MANAGEMENT",
+                description:
+                  "Captains Bridge can provide ongoing crew management services for entire crews or specific nationalities or departments depending on the requirements of the vessels and maritime industry employers.",
+                image: "/maritime-professionals-discussing-partnership.jpg",
+              },
+              {
+                icon: Ship,
+                title: "MARINE DOCUMENTATION",
+                description:
+                  "We are a full-service source for all facets of marine documentation: pleasure crafts, commercial fishing vessels, charter, and fleet. With three, expertly staffed offices, we can assist in the preparation and processing of documentation.",
+                image: "/maritime-certificates.jpg",
+              },
+              {
+                icon: MapPin,
+                title: "INDIAN CDC ASSISTANCE",
+                description:
+                  "Our service range includes a wide range of Arranging CDC. Indian mariners are among the most required professionals in the shipping industry worldwide. We assist with CDC processes and guidance.",
+                image: "/professional-maritime-officer-portrait.jpg",
               },
               {
                 icon: Anchor,
-                title: "Blessed With",
+                title: "PLACEMENT GUIDANCE",
                 description:
-                  "Blessed with a rich coastal line and a well known sea port in south India Kochi is notable for its positive and supportive mariti...",
-                image: "/advanced-computer-lab-with-maritime-simulation.jpg",
+                  "The Captains Bridge Guidance and Placement Cell send invitations to companies/organizations along with relevant information and allots dates to companies for institute interviews based on various details.",
+                image: "/maritime-cadets-in-white-uniform-training.jpg",
               },
               {
                 icon: Compass,
-                title: "Why Choose Us",
+                title: "MARINE – OFFSHORE COURSES",
                 description:
-                  "Shipping, logistics, and freight are industries at the heart of modern society. These high-technology and operational-driven services...",
-                image: "/group-of-maritime-students-in-uniform.jpg",
+                  "Captains Bridge offers a broad range of courses for the diverse Marine and Offshore sectors. We provide specialized training, as well as fully compliant courses in accordance with the guidelines of the industry.",
+                image: "/maritime-training-session.jpg",
               },
             ].map((item, index) => (
               <AnimatedSection key={index} delay={index * 100}>
@@ -238,7 +379,7 @@ export default function CochinMaritimeAcademy() {
                     <p className="text-sm leading-relaxed text-center text-dark-secondary mb-6">
                       {item.description}
                     </p>
-                    <button className="text-sm font-semibold mx-auto block transition-colors duration-200 uppercase text-accent-gold hover:text-accent-gold/80">
+                    <button className="text-sm font-semibold mx-auto block transition-colors duration-200 uppercase text-accent-gold hover:text-accent-gold/80" onClick={() => openHomeDetail(item)}>
                       Read More →
                     </button>
                   </CardContent>
@@ -251,11 +392,11 @@ export default function CochinMaritimeAcademy() {
 
       {/* Courses Section */}
       <section id="courses" className="py-32 bg-page-white">
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight heading-premium text-primary-cyan">
-                Cochin Maritime Academy Facilities
+                Captains Bridge Facilities
               </h2>
               <div className="w-16 h-px mx-auto mb-10 divider-gold" />
               <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-medium body-premium">
@@ -269,7 +410,7 @@ export default function CochinMaritimeAcademy() {
               {
                 title: "Spacious Class Rooms With Well Equipped Furniture",
                 description:
-                  "Cochin Maritime can boast of spacious, well-ventilated and excellently furnished classrooms to make the students learning comfortable and enjoyable. Individual tables and chairs are provided to studen...",
+                  "Captains Bridge can boast of spacious, well-ventilated and excellently furnished classrooms to make the students learning comfortable and enjoyable. Individual tables and chairs are provided to studen...",
                 image: "/spacious-maritime-classroom-with-modern-furniture.jpg",
               },
               {
@@ -281,13 +422,13 @@ export default function CochinMaritimeAcademy() {
               {
                 title: "Food Safety and HACCP Training",
                 description:
-                  "Cochin Maritime has developed this course to provide an understanding of management systems approach to food safety and data required to implement and maintain Food Safety System. By the end of the...",
+                  "Captains Bridge has developed this course to provide an understanding of management systems approach to food safety and data required to implement and maintain Food Safety System. By the end of the...",
                 image: "/food-safety-training-checklist-maritime.jpg",
               },
               {
                 title: "Placement Guidelines",
                 description:
-                  "Cochin Maritime operate a unique of sea placement program where the Cadets train on various ship types across different marine sectors...",
+                  "Captains Bridge operate a unique of sea placement program where the Cadets train on various ship types across different marine sectors...",
                 image: "/maritime-cadets-in-white-uniform-training.jpg",
               },
               {
@@ -299,7 +440,7 @@ export default function CochinMaritimeAcademy() {
               {
                 title: "Partners & Supporting Organisations",
                 description:
-                  "Our supporting partners have extended their knowledge, expertise, network and valuable insights in so many ways we are thankful for Cochin Maritime standards and process remain relevant because of our...",
+                  "Our supporting partners have extended their knowledge, expertise, network and valuable insights in so many ways we are thankful for Captains Bridge standards and process remain relevant because of our...",
                 image: "/maritime-professionals-discussing-partnership.jpg",
               },
             ].map((course, index) => (
@@ -309,16 +450,18 @@ export default function CochinMaritimeAcademy() {
                     <ParallaxImage src={course.image || "/placeholder.svg"} alt={course.title} className="w-full h-full" intensity={0.12} zoom={0.08} />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300"></div>
                   </div>
-                  <CardContent className="p-8 flex-grow flex flex-col">
-                    <h3 className="text-base font-bold mb-4 leading-tight uppercase heading-premium text-primary-cyan">
+                  <CardContent className="p-8 flex-grow flex flex-col min-h-[160px]">
+                    <h3 className="text-base font-bold mb-4 leading-tight uppercase heading-premium text-primary-cyan break-words">
                       {course.title}
                     </h3>
-                    <p className="text-sm leading-relaxed mb-6 flex-grow text-dark-secondary">
+                    <p className="text-sm leading-relaxed mb-6 flex-grow text-dark-secondary overflow-hidden">
                       {course.description}
                     </p>
-                    <button className="w-full font-semibold transition-all py-3 rounded uppercase btn-primary">
-                      View Detail
-                    </button>
+                    <div className="mt-2">
+                      <button className="w-full font-semibold transition-all py-3 rounded uppercase btn-primary" onClick={() => openHomeDetail(course)}>
+                        View Detail
+                      </button>
+                    </div>
                   </CardContent>
                 </Card>
               </AnimatedSection>
@@ -332,14 +475,14 @@ export default function CochinMaritimeAcademy() {
         imageUrl="https://images.pexels.com/photos/3435378/pexels-photo-3435378.jpeg"
         className="py-32"
       >
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="mx-auto max-w-4xl text-center mb-20">
               <h2 className="text-4xl md:text-5xl font-black mb-8 leading-tight heading-premium text-white" style={{ color: "rgba(255, 255, 255, 0.95)" }}>
                 Partners and Supporting Organization
               </h2>
               <p className="text-lg md:text-xl body-premium text-white" style={{ color: "rgba(255, 255, 255, 0.9)" }}>
-                The Institute for Cochin Maritime Institute strives to increase public understanding of the causes and consequences of marine degradation while also promoting solutions. Through our partnerships, we are working to further conservation of marine life and ocean environments around the world.
+                The Institute for Captains Bridge strives to increase public understanding of the causes and consequences of marine degradation while also promoting solutions. Through our partnerships, we are working to further conservation of marine life and ocean environments around the world.
               </p>
             </div>
           </AnimatedSection>
@@ -368,41 +511,49 @@ export default function CochinMaritimeAcademy() {
                 title: "Hydrogen Sulphide Awareness (H2S)",
                 desc:
                   "Hydrogen Sulphide (H2S) is a highly toxic and flammable gas. Each year in...",
+                image: null,
               },
               {
                 title: "Helicopter Under‑Water Escape Training (HUET)",
                 desc:
                   "This course aims to train personnel intended to work offshore, using the hel...",
+                image: null,
               },
               {
                 title: "Basic Offshore Safety & Emergency Training (BOISET)",
                 desc:
                   "The course is designed for personnel intending to ...",
+                image: null,
               },
               {
                 title: "Rigging and Slinging Safety Level - 2",
                 desc:
                   "Rigger Level 2 training provides the knowledge and skills necessary for a p...",
+                image: null,
               },
               {
                 title: "Lifting and Hoisting Safety",
                 desc:
                   "The course provides vital information for those assisting or working around...",
+                image: null,
               },
               {
                 title: "Crane Operators Theory (On Demand Practical)",
                 desc:
                   "Our Crane Operator Training Program will train your operators on the site...",
+                image: null,
               },
               {
                 title: "Cookery Course With HACCP",
                 desc:
                   "On completion of this food safety training course, participants will be abl...",
+                image: null,
               },
               {
                 title: "Basic Cooking Course Certification",
                 desc:
                   "Get info about online programs in cooking. Read about program requiremen...",
+                image: null,
               },
             ].map((card, i) => (
               <button
@@ -411,6 +562,7 @@ export default function CochinMaritimeAcademy() {
                   setSelectedCourse({
                     title: card.title,
                     description: courseDescriptions[card.title as keyof typeof courseDescriptions] || card.desc,
+                    image: card.image,
                   })
                   setCourseModalOpen(true)
                 }}
@@ -522,7 +674,7 @@ export default function CochinMaritimeAcademy() {
 
       {/* Facilities Highlight */}
       <section id="facilities" className="py-32 bg-page-white">
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight heading-premium text-primary-cyan">
@@ -548,7 +700,7 @@ export default function CochinMaritimeAcademy() {
                 </div>
                 <div>
                   <p className="leading-relaxed mb-8 text-justify text-base body-premium text-dark-secondary">
-                    Cochin Maritime training for merchant navy is a new dimension in the field of job oriented professional courses. Facility here in catering with a rich coastline, a well-known port and an established maritime environment, and is notable for its positive side of the maritime sector. By catering complete courses in accordance with the guidelines of the International Maritime Organization's Standards for Training, Certification and Watchkeeping, International Safety Management Code, and International Ship and Port Facility Security.
+                    Captains Bridge training for merchant navy is a new dimension in the field of job oriented professional courses. Facility here in catering with a rich coastline, a well-known port and an established maritime environment, and is notable for its positive side of the maritime sector. By catering complete courses in accordance with the guidelines of the International Maritime Organization's Standards for Training, Certification and Watchkeeping, International Safety Management Code, and International Ship and Port Facility Security.
                   </p>
                   <p className="leading-relaxed text-justify text-base body-premium text-dark-secondary">
                     We further mention that we have the vast experience in training the aspirant candidates in all trades essential for merchant navy career from Cadet & GP Officer.
@@ -565,7 +717,7 @@ export default function CochinMaritimeAcademy() {
         imageUrl="https://images.pexels.com/photos/8650298/pexels-photo-8650298.jpeg"
         className="py-32"
       >
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="text-center mb-16">
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight heading-premium text-white">
@@ -585,7 +737,7 @@ export default function CochinMaritimeAcademy() {
 
       {/* Contact Section */}
       <section id="contact" className="py-32 bg-page-white">
-        <div className="container mx-auto px-4" style={{ maxWidth: '1320px', paddingLeft: '80px', paddingRight: '80px' }}>
+        <div className="container mx-auto px-4 page-inner">
           <AnimatedSection>
             <div className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight heading-premium text-primary-cyan">
@@ -662,29 +814,7 @@ export default function CochinMaritimeAcademy() {
             <AnimatedSection delay={200}>
               <Card className="border border-light-color card-minimal" style={{ backgroundColor: 'rgb(245, 243, 239)' }}>
                 <CardContent className="p-10">
-                  <form className="space-y-6">
-                    <div>
-                      <Input placeholder="Your Name *" className="border border-light-color rounded-md bg-white text-gray-800 text-sm" required />
-                    </div>
-                    <div>
-                      <Input type="email" placeholder="Your Email *" className="border border-light-color rounded-md bg-white text-gray-800 text-sm" required />
-                    </div>
-                    <div>
-                      <Input type="tel" placeholder="Your Phone *" className="border border-light-color rounded-md bg-white text-gray-800 text-sm" required />
-                    </div>
-                    <div>
-                      <Select defaultValue="" className="border border-light-color rounded-md bg-white text-gray-800 text-sm">
-                        <option value="" disabled>Select a course</option>
-                        {courseTitles.map((title) => (
-                          <option key={title} value={title}>{title}</option>
-                        ))}
-                      </Select>
-                    </div>
-                    <div>
-                      <Textarea rows={4} placeholder="Your Message" className="border border-light-color rounded-md bg-white text-gray-800 text-sm" />
-                    </div>
-                    <button type="submit" className="w-full btn-primary">Send Message</button>
-                  </form>
+                  <HomeContactForm />
                 </CardContent>
               </Card>
             </AnimatedSection>
@@ -700,6 +830,8 @@ export default function CochinMaritimeAcademy() {
       >
         <ChevronRight className="rotate-[-90deg]" size={24} />
       </button>
+
+      <DetailDialog open={dialogOpen} onOpenChange={setDialogOpen} data={dialogData} />
 
       {/* Course Modal Dialog */}
       <Dialog.Root open={courseModalOpen} onOpenChange={setCourseModalOpen}>
@@ -722,7 +854,15 @@ export default function CochinMaritimeAcademy() {
                   </Dialog.Close>
                 </div>
                 <div className="w-full h-px bg-accent-gold mb-6" />
-                <div className="prose prose-sm max-w-none">
+
+                {selectedCourse.image ? (
+                  <div className="mt-2 overflow-hidden rounded-lg">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={selectedCourse.image} alt={selectedCourse.title} className="w-full h-auto max-h-[50vh] object-contain" loading="lazy" decoding="async" />
+                  </div>
+                ) : null}
+
+                <div className="prose prose-sm max-w-none mt-4">
                   <p className="text-sm md:text-base leading-relaxed text-gray-700 whitespace-pre-line">
                     {selectedCourse.description}
                   </p>

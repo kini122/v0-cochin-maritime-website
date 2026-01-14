@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select } from "@/components/ui/select"
@@ -11,6 +11,41 @@ import { courseTitles } from "@/lib/courses"
 function ContactClient() {
   const searchParams = useSearchParams()
   const initialMessage = searchParams.get("message") || ""
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    course: '',
+    message: initialMessage
+  })
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!formData.name || !formData.email || !formData.phone) {
+      alert('Please fill in all required fields')
+      return
+    }
+
+    setIsLoading(true)
+
+    const whatsappNumber = '919495145500'
+    const message = `Hello, I am interested in your courses.\n\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCourse: ${formData.course || 'Not specified'}\n\nMessage: ${formData.message || 'No additional message'}`
+
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+
+    window.open(whatsappLink, '_blank')
+
+    setFormData({ name: '', email: '', phone: '', course: '', message: '' })
+    setIsLoading(false)
+  }
 
   return (
     <div className="bg-page-white">
@@ -34,7 +69,7 @@ function ContactClient() {
           <div className="space-y-5 text-base text-dark-secondary">
             <div className="flex items-start gap-3">
               <MapPin className="flex-shrink-0 mt-1 text-primary-cyan" />
-              <span>Aditya Complex, Kochupally road, Next to Anjali Marriage hall, Thoppumpady, Kochi – 682005</span>
+              <span>Aditya Complex, Kochupally road, Next to Anjali Marriage hall, Thoppumpady, Kochi �� 682005</span>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="flex-shrink-0 text-primary-cyan" />
@@ -47,20 +82,62 @@ function ContactClient() {
           </div>
         </div>
 
-        <form className="space-y-4 rounded border p-6 shadow-sm bg-white border-light-color">
+        <form onSubmit={handleSubmit} className="space-y-4 rounded border p-6 shadow-sm bg-white border-light-color">
           <div className="grid gap-4 md:grid-cols-2">
-            <Input placeholder="Full name *" required className="border rounded bg-white text-gray-800" />
-            <Input type="email" placeholder="Email *" required className="border rounded bg-white text-gray-800" />
+            <Input
+              name="name"
+              placeholder="Full name *"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="border rounded bg-white text-gray-800"
+            />
+            <Input
+              name="email"
+              type="email"
+              placeholder="Email *"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="border rounded bg-white text-gray-800"
+            />
           </div>
-          <Input type="tel" placeholder="Phone *" required className="border rounded bg-white text-gray-800" />
-          <Select defaultValue="" className="border rounded bg-white text-gray-800">
-            <option value="" disabled>Select a course</option>
+          <Input
+            name="phone"
+            type="tel"
+            placeholder="Phone *"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            className="border rounded bg-white text-gray-800"
+          />
+          <Select
+            name="course"
+            value={formData.course}
+            onChange={handleChange}
+            defaultValue=""
+            className="border rounded bg-white text-gray-800"
+          >
+            <option value="">Select a course</option>
             {courseTitles.map((title) => (
               <option key={title} value={title}>{title}</option>
             ))}
           </Select>
-          <Textarea rows={5} placeholder="Message" defaultValue={initialMessage} className="border rounded bg-white text-gray-800" />
-          <button type="submit" className="w-full btn-primary">Send Message</button>
+          <Textarea
+            name="message"
+            rows={5}
+            placeholder="Message"
+            value={formData.message}
+            onChange={handleChange}
+            className="border rounded bg-white text-gray-800"
+          />
+          <button
+            type="submit"
+            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Sending...' : 'Send Message'}
+          </button>
         </form>
       </section>
     </div>

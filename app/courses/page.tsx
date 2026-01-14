@@ -71,16 +71,18 @@ export default function CoursesPage() {
               <div className="h-40 w-full overflow-hidden">
                 <ParallaxImage src={course.image} alt={course.title} className="h-full w-full" intensity={0.12} zoom={0.06} />
               </div>
-              <CardContent className="p-5">
-                <h3 className="mb-2 text-base font-bold uppercase heading-premium text-primary-cyan">
+              <CardContent className="p-5 flex flex-col flex-grow min-h-[140px]">
+                <h3 className="mb-2 text-base font-bold uppercase heading-premium text-primary-cyan break-words">
                   {course.title}
                 </h3>
-                <p className="mb-4 text-sm leading-relaxed text-dark-secondary">
+                <p className="mb-4 text-sm leading-relaxed text-dark-secondary flex-grow overflow-hidden">
                   Concise overview of the course outcomes, key competencies, and duration with hands‑on practice.
                 </p>
-                <button className="w-full font-semibold py-2 rounded transition-all uppercase btn-primary" onClick={() => openDetails(course)}>
-                  View Detail
-                </button>
+                <div className="mt-2">
+                  <button className="w-full font-semibold py-2 rounded transition-all uppercase btn-primary" onClick={() => openDetails(course)}>
+                    View Detail
+                  </button>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -112,6 +114,7 @@ export default function CoursesPage() {
           </div>
         </div>
       </section>
+      <DetailDialog open={dialogOpen} onOpenChange={setDialogOpen} data={dialogData} />
     </div>
   )
 }

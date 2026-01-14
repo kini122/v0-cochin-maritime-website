@@ -12,24 +12,17 @@ type ShowImageListItemProps = {
 
 function RevealImageListItem({ text, images }: ShowImageListItemProps) {
   // responsive image container sizing
-  const imageContainerClass = "absolute -right-8 -top-6 md:-right-10 md:-top-8 z-40 h-[120px] md:h-[160px] w-[160px] md:w-[224px]"
+  const imageContainerClass = "hidden sm:block absolute -right-8 -top-6 md:-right-10 md:-top-8 z-40 h-[120px] md:h-[160px] w-[160px] md:w-[224px]"
   const imageEffectClass =
     "relative duration-500 delay-100 shadow-sm group-hover:shadow-md opacity-0 group-hover:opacity-100 group-hover:w-full group-hover:h-full w-14 md:w-20 h-14 md:h-20 overflow-hidden transition-all rounded-md"
 
   return (
     <span className="reveal-item group relative inline-block align-baseline mx-1 md:mx-2">
       <button
-        type="button"
-        className="reveal-trigger inline-block text-[24px] md:text-[32px] lg:text-[40px] leading-[0.95] transition-colors duration-300 group-hover:opacity-50 focus:outline-none"
-        style={{
-          font: '900 clamp(20px, 5vw, 40px) / 1 "Bebas Neue", sans-serif',
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          color: '#0098b7',
-          fontWeight: 900,
-        }}
-        aria-label={text}
-      >
+    type="button"
+    className="reveal-trigger reveal-trigger-text inline-block text-[24px] md:text-[32px] lg:text-[40px] leading-[0.95] transition-colors duration-300 group-hover:opacity-50 focus:outline-none"
+    aria-label={text}
+  >
         {text}
       </button>
 
@@ -55,7 +48,7 @@ export function RevealImageList({ className }: { className?: string }) {
       text: "CERTIFIED MARITIME COURSES",
       images: [
         { src: "/images/certification-hero.jpg", alt: "Maritime certification programs" },
-        { src: "/images/hero-certification.svg", alt: "Certified maritime courses" },
+        { src: "https://images.pexels.com/photos/8111865/pexels-photo-8111865.jpeg", alt: "Certified maritime courses" },
       ],
     },
     {
@@ -90,13 +83,13 @@ export function RevealImageList({ className }: { className?: string }) {
       text: "INDUSTRY-RECOGNIZED ACCREDITATION",
       images: [
         { src: "/maritime-certificates.jpg", alt: "Industry certification and accreditation" },
-        { src: "/images/hero-certification.svg", alt: "Industry accreditation standards" },
+        { src: "https://images.pexels.com/photos/11035385/pexels-photo-11035385.jpeg", alt: "Industry accreditation standards" },
       ],
     },
   ]
 
   return (
-    <div className={cn("reveal-list-root mx-auto px-3 md:px-4 py-8 md:py-12 text-center", className)} style={{ maxWidth: '85vw' }}>
+    <div className={cn("reveal-list-root mx-auto px-3 md:px-4 py-8 md:py-12 text-center reveal-list-max", className)}>
       <div className="reveal-list-wrapper inline-block">
         <p className="reveal-paragraph text-center leading-relaxed md:leading-loose">{/* continuous sentence with inline text */}
           {items.map((it, idx) => (

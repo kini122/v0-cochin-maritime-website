@@ -6,12 +6,13 @@ import "./globals-overrides.css"
 import SiteHeader from "@/components/site-header"
 import SiteFooter from "@/components/site-footer"
 import WhatsAppButton from "@/components/whatsapp-button"
+import SafeFetchProvider from "@/components/safe-fetch-provider"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Cochin Maritime Academy - Premier Maritime Training Institute",
+  title: "SNEF India - Premier Maritime Training Institute",
   description:
     "Located in South India, Kochi. Offering comprehensive maritime training courses for merchant navy, certifications, and placement support.",
   keywords: "maritime academy, merchant navy training, maritime courses, ship training, Kochi, maritime education",
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`font-sans antialiased`}>
         <SiteHeader />
+        <SafeFetchProvider />
         <main className="min-h-[60vh] pt-24">{children}</main>
         <SiteFooter />
         <WhatsAppButton />

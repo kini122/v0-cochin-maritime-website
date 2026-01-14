@@ -15,7 +15,7 @@ export default function SiteFooter() {
           {/* About Section */}
           <div className="space-y-4">
             <h3 className="text-base font-semibold uppercase tracking-wider heading-premium text-primary-cyan">
-              About SNEFF INDIA
+              About SNEF INDIA
             </h3>
             <p className="text-xs text-gray-700 leading-relaxed font-body">
               Located in Kochi, India, we offer comprehensive maritime education with modern facilities and experienced faculty across shipping, logistics, and marine disciplines.
@@ -76,7 +76,7 @@ export default function SiteFooter() {
         {/* Footer Bottom */}
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <p className="text-xs text-gray-600 font-body uppercase tracking-wider">
-            © 2025 SNEFF INDIA. All Rights Reserved
+            © 2025 SNEF INDIA. All Rights Reserved
           </p>
 
           {/* Back to Top Button */}

@@ -1,4 +1,3 @@
-/* Enforce Inter and non-bold for all non-heading elements site-wide */
 body *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif !important;
   font-weight: 400 !important;
@@ -7,4 +6,347 @@ body *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
 /* Ensure buttons don't show bold by utility class */
 .button, button, a.button {
   font-weight: 400 !important;
+}
+
+/* Prevent horizontal scroll globally */
+html, body {
+  overflow-x: hidden !important;
+}
+
+/* Ensure images and videos scale correctly */
+img, picture, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Card and parallax images should cover their container */
+[data-slot="card"] img,
+.parallax-image img,
+.reveal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dialog / modal images should be fully visible */
+[data-slot="dialog-content"] img,
+.DialogContent img,
+[data-slot="card-content"] .modal-image,
+.dialog img,
+.DialogContent img,
+[data-slot="card-content"] img[alt] {
+  object-fit: contain !important;
+  max-height: 50vh !important;
+  width: 100% !important;
+}
+
+/* Ensure hero video and images keep full frame without causing overflow */
+video.hero-video, .youtube-hero video, .youtube-hero-background video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Touch target minimums for mobile */
+button, .btn-primary, .btn-outline-cyan, a.btn, .button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 14px;
+}
+
+/* Make CTA buttons more clickable on mobile */
+@media (max-width: 640px) {
+  .btn-primary, .btn-outline-cyan, button, .button {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+
+  /* Reduce hero paddings on small screens to avoid overflow and clipping */
+  #home .mx-auto, #home .container, #home > div {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Scale down oversized headings to avoid wrap overflow */
+  h1, .heading-premium {
+    font-size: clamp(28px, 6vw, 56px) !important;
+    line-height: 1.02 !important;
+  }
+
+  /* Ensure cards stack nicely */
+  [data-slot="card"] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Prevent text overflow inside cards */
+[data-slot="card"] h3, [data-slot="card"] p {
+  overflow-wrap: anywhere;
+}
+
+/* Fix modal width on small screens */
+[data-radix-overlay] + [data-radix-content],
+.dialog-content, .DialogContent {
+  max-width: 95vw !important;
+  width: calc(100vw - 32px) !important;
+}
+
+/* Ensure header logo scales on small screens */
+header img, .site-header img {
+  max-width: 160px;
+  height: auto;
+}
+
+/* Hero specific styles to preserve desktop layout across devices */
+.hero-inner {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.hero-title {
+  color: rgba(255, 255, 255, 1);
+  letter-spacing: 3.6px;
+  text-transform: uppercase;
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 900;
+  line-height: 0.9;
+  /* Subtle blurred shadow so title is readable above video (increased by 50%) */
+  text-shadow: 0 12px 27px rgba(0, 0, 0, 0.675);
+  /* Scale responsively but keep desktop proportions */
+  font-size: clamp(28px, 6.5vw, 99px);
+  display: inline-block;
+  min-height: 1.2em;
+}
+
+/* Typing cursor animation */
+.hero-title span {
+  display: inline-block;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 1);
+  }
+  50%, 100% {
+    opacity: 0.3;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.hero-cta button {
+  min-width: 180px;
+}
+
+/* Black tinted overlay for hero background (no blur) */
+.hero-overlay {
+  background-clip: padding-box;
+  /* slight border to separate from video */
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+@media (max-width: 1024px) {
+  .hero-inner {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+  .hero-title {
+    font-size: clamp(26px, 8vw, 72px);
+    letter-spacing: 2.8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    align-items: center !important;
+  }
+  .hero-title {
+    font-size: clamp(20px, 10vw, 44px);
+    text-align: center;
+    letter-spacing: 1.6px;
+    line-height: 1.02;
+  }
+  .hero-cta {
+    width: 100%;
+    align-items: center;
+  }
+  .hero-cta button {
+    width: 80%;
+  }
+}
+
+/* Ensure hero video is positioned responsively */
+.youtube-hero-background video,
+.youtube-hero-background iframe {
+  display: block;
+  max-width: none;
+  max-height: none;
+}
+
+/* For very short viewports (mobile), limit the video size to avoid extreme scaling */
+@media (max-height: 600px) {
+  .youtube-hero-background video {
+    transform: translate(-50%, -50%) scale(1.05) !important;
+  }
+}
+
+/* Header specific layout overrides */
+.site-header-container {
+  height: 134px;
+  max-width: 1652px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 29px 0 80px;
+}
+
+.site-header-title {
+  font-weight: 600;
+}
+
+.site-header-brand-color {
+  color: rgb(157, 57, 57);
+}
+
+.mobile-menu-toggle {
+  /* Placeholder class for future header toggle overrides */
+}
+
+/* Page container used across sections instead of inline styles */
+.page-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+/* Card sizing and touch target improvements */
+.card-minimal {
+  /* Ensure cards have comfortable tap targets on small screens */
+}
+
+.reveal-list-max {
+  max-width: 85vw;
+}
+
+.reveal-trigger-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 900;
+  font-size: clamp(20px, 5vw, 40px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0098b7;
+  line-height: 0.95;
+}
+
+/* Adjust image object-fit on smaller screens to avoid cropping important visuals */
+.parallax-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.parallax-image img,
+[data-slot="card"] img,
+.reveal-image img {
+  object-fit: cover;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 1024px) {
+  .page-inner {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+  .site-header-container {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .site-header-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  /* Make cards slightly taller and increase internal padding for touch friendliness */
+  .card-minimal .p-8, .card-minimal .px-8, .card-minimal .py-8 {
+    padding: 16px !important;
+  }
+  .card-minimal .h-48 {
+    height: 220px !important;
+  }
+  .card-minimal {
+    min-height: 320px;
+  }
+  /* Reveal list adjustments */
+  .reveal-list-root {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  /* Ensure images stay visible on mobile with object-cover */
+  .parallax-image img,
+  [data-slot="card"] img,
+  .reveal-image img {
+    object-fit: cover !important;
+  }
+
+  /* Ensure card image containers are tall enough */
+  .h-48, .h-40 {
+    height: 180px !important;
+    min-height: 180px !important;
+  }
+}
+
+/* Video fallback sizing on narrow screens */
+@media (max-width: 640px) {
+  .youtube-hero-background video,
+  .youtube-hero-background iframe,
+  .youtube-hero-background .hero-video {
+    width: auto !important;
+    height: 100% !important;
+    min-width: 100% !important;
+  }
+
+  /* Ensure hero inner paddings are adjusted */
+  .hero-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Make CTA buttons easier to tap */
+  .hero-cta button {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    font-size: 15px !important;
+  }
+
+  /* Parallax image adjustments */
+  .hero-parallax-image {
+    object-fit: contain !important;
+  }
+
+  /* Card base improvements */
+  .card-base {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box;
+  }
+
+  /* Reveal list tweaks */
+  .reveal-list-root {
+    max-width: 100% !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
 }

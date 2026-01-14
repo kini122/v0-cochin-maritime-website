@@ -1,4 +1,4 @@
-# Cochin Maritime Website
+# SNEF India Website
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
@@ -14,7 +14,7 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://vercel.com/athulshyamakini-7769s-projects/v0-cochin-maritime-website](https://vercel.com/athulshyamakini-7769s-projects/v0-cochin-maritime-website)**
+**SNEF India Website - Deployed on Vercel**
 
 ## Build your app
 

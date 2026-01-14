@@ -21,7 +21,7 @@ const testimonials: Testimonial[] = [
   {
     name: "PRIYA DESHMUKH",
     role: "Deck Officer",
-    quote: "The hands-on training and mentorship at Cochin Maritime made all the difference in my professional development.",
+    quote: "The hands-on training and mentorship at Captains Bridge made all the difference in my professional development.",
     image: "/female-maritime-officer-portrait.jpg",
   },
   {
@@ -39,7 +39,7 @@ const testimonials: Testimonial[] = [
   {
     name: "RAJESH IYER",
     role: "Engine Officer",
-    quote: "Cochin Maritime's approach to maritime education is modern, industry-relevant, and truly world-class.",
+    quote: "Captains Bridge's approach to maritime education is modern, industry-relevant, and truly world-class.",
     image: "/maritime-engineer-officer-portrait.jpg",
   },
   {
