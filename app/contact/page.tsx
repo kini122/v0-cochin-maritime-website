@@ -1,11 +1,18 @@
 "use client"
 
+import { Suspense } from "react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { Select } from "@/components/ui/select"
 import { Mail, MapPin, Phone } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { courseTitles } from "@/lib/courses"
 
-export default function ContactPage() {
+function ContactClient() {
+  const searchParams = useSearchParams()
+  const initialMessage = searchParams.get("message") || ""
+
   return (
     <div>
       <div className="relative min-h-[50vh] w-full overflow-hidden bg-center bg-cover" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('https://images.pexels.com/photos/7634228/pexels-photo-7634228.jpeg')" }}>
@@ -41,11 +48,24 @@ export default function ContactPage() {
             <Input type="email" placeholder="Email *" required />
           </div>
           <Input type="tel" placeholder="Phone *" required />
-          <Input placeholder="Course of interest" />
-          <Textarea rows={5} placeholder="Message" />
+          <Select defaultValue="">
+            <option value="" disabled>Select a course</option>
+            {courseTitles.map((title) => (
+              <option key={title} value={title}>{title}</option>
+            ))}
+          </Select>
+          <Textarea rows={5} placeholder="Message" defaultValue={initialMessage} />
           <Button className="w-full bg-[#0B2A4A] text-white hover:bg-[#081E35]">Send Message</Button>
         </form>
       </section>
     </div>
+  )
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={null}>
+      <ContactClient />
+    </Suspense>
   )
 }

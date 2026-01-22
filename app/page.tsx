@@ -25,6 +25,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import DetailDialog, { type DetailDialogData } from "@/components/detail-dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Select } from "@/components/ui/select"
+import { courseTitles } from "@/lib/courses"
 import AnimatedCounter from "@/components/animated-counter"
 import TestimonialsMarquee from "@/components/testimonials-marquee"
 import YouTubeHeroBackground from "@/components/youtube-hero-background"
@@ -597,10 +599,15 @@ export default function CochinMaritimeAcademy() {
                       />
                     </div>
                     <div>
-                      <Input
-                        placeholder="Course Interest"
+                      <Select
+                        defaultValue=""
                         className="border-[#0B2A4A]/30 focus:border-[#0B2A4A] focus:ring-[#0B2A4A]"
-                      />
+                      >
+                        <option value="" disabled>Select a course</option>
+                        {courseTitles.map((title) => (
+                          <option key={title} value={title}>{title}</option>
+                        ))}
+                      </Select>
                     </div>
                     <div>
                       <Textarea
